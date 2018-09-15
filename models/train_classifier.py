@@ -26,8 +26,7 @@ def load_data(database_filepath):
     df = pd.read_sql("SELECT * FROM disaster_response",engine) 
 
     X = df['message']
-    # here we drop child allone because we dont have a single message that is classified as such
-    y = df.drop(['id', 'message', 'original', 'genre', 'child_alone'],  axis=1).astype(float)
+    y = df.drop(['id', 'message', 'original', 'genre'],  axis=1).astype(float)
     categories = y.columns.values
     return X, y, categories
 
