@@ -10,6 +10,7 @@ nltk = "*"
 flask = "*"
 sklearn = "*"
 sqlalchemy = "*"
+scipy = "*"
 
 [dev-packages]
 
