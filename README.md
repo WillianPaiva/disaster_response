@@ -1,14 +1,33 @@
 # Disaster Response Pipeline Project
 
+### dependencies
+this project was made using the Pipenv tool but a requirements.txt is also included
+
+#### with Pipenv
+run the following commands to use this tool
+```
+pipenv install
+```
+
+#### with pip
+
+run the following commands *inside your virtualenv* to use this tool
+```
+pip install -r requirements.txt
+```
+
 ### Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
 
-    - To run ETL pipeline that cleans data and stores in database
-        `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
-    - To run ML pipeline that trains classifier and saves
-        `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
+#### with Pipenv
+```
+pipenv run ./run.sh
+```
 
-2. Run the following command in the app's directory to run your web app.
-    `python run.py`
+#### with pip
+*inside your virtualenv*
+```
+./run.sh
+```
 
 3. Go to http://0.0.0.0:3001/
