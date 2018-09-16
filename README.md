@@ -60,3 +60,29 @@ python app/run.sh
 ```
 
 Go to http://0.0.0.0:3001/
+
+
+
+
+
+
+
+
+### File tree:
+
+1. ./app - the web app folder
+   ./app/run.py - flask web app
+   ./app/templates - html templates
+
+
+2. ./data - contains all the files related to the dataset
+   ./data/disaster_categories.csv - csv file with all the categories
+   ./data/disaster_messages.csv - csv file with all the messages
+   ./data/process_data.py - data cleaning and database creation script
+   ./data/disaster_response.db - the sqlite3 database (generated after process_data.py execution)
+
+3.  ./models - contains all the files related to the training of the model
+    ./model/train_classifier.py - model training and dump script
+    ./model/model.pkl - saved model (generated after train_classifier.py execution )
+
+4. ./notebooks - Udacity notebooks used to test the algorithms before implementation
