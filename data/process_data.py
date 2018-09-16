@@ -5,7 +5,11 @@ from sqlalchemy import create_engine
 
 def convert_categories_to_numerical(categories: pd.DataFrame)->pd.DataFrame:
     '''
-    change the values of the categories columns to 0 or 1
+    change the string category to a numerical 0 or 1 
+    Args:
+        categories: the pandas DataFrame of the categories to be encoded
+    Returns
+        categories: encoded categories
     '''
     for col in categories:
         categories[col] = categories[col].map(lambda x: 1 if int(x.split("-")[1]) > 0 else 0 )
@@ -15,6 +19,10 @@ def convert_categories_to_numerical(categories: pd.DataFrame)->pd.DataFrame:
 def split_categories(categories: pd.DataFrame)->pd.DataFrame:
     '''
     splits the categories into a one-hot encoded format
+    Args:
+        categories: the pandas DataFrame of the categories to be encoded
+    Returns
+        categories: encoded categories
     '''
     categories = categories['categories'].str.split(';',expand=True)
     row = categories.iloc[[1]].values[0]
@@ -26,7 +34,12 @@ def split_categories(categories: pd.DataFrame)->pd.DataFrame:
 
 def load_data(messages_filepath: str, categories_filepath: str)->pd.DataFrame:
     '''
-    loads the 2 datasets and merge into 1 dataset
+    loads the 2 datasets and merge into 1 encoded  dataset
+    Args:
+        messages_filepath: the file path to the messages csv
+        categories_filepath: the file path to the categories csv
+    Returns:
+        dataset: a pandas dataset with the both files merged and with the categories encoded
     '''
     messages = pd.read_csv(messages_filepath)
     categories = split_categories(pd.read_csv(categories_filepath))
@@ -35,12 +48,23 @@ def load_data(messages_filepath: str, categories_filepath: str)->pd.DataFrame:
 
 
 def clean_data(df: pd.DataFrame)->pd.DataFrame:
-    '''drops all the duplicates'''
+    '''
+    drops all the duplicates
+    Args:
+        df: pandas DataFrame to drop the duplicates
+    Returns:
+        df: pandas DataFrame without duplicates
+    '''
     return df.drop_duplicates()
 
 
 def save_data(df: pd.DataFrame, database_filename: str)->None:
-    '''save database into a sql file'''
+    '''
+    save database into a sql file
+    Args:
+        df: pandas DataFrame to save
+        database_filename: the path where to save the sql Database
+    '''
     engine = create_engine('sqlite:///{}.db'.format(database_filename))
     df.to_sql('disaster_response', engine, index=False)
 
