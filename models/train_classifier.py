@@ -10,6 +10,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.model_selection import GridSearchCV
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.metrics import classification_report
+from sklearn.metrics import fbeta_score, make_scorer
 import numpy as np
 import pickle
 
@@ -50,7 +51,22 @@ def build_model():
                                        n_estimators=20)
         )
     ])
-    return pipeline
+    parameters = {
+        'vect__ngram_range': ((1, 1), (1, 2)),
+        'vect__max_df': (0.5, 0.75, 1.0),
+        'vect__max_features': (None, 5000, 10000),
+        'tfidf__use_idf': (True, False),
+        'clf__max_depth': [10, 20, None],
+        'clf__min_samples_leaf': [1, 2, 4],
+        'clf__min_samples_split': [2, 5, 10],
+        'clf__n_estimators': [10, 20, 40, 50, 100]}
+
+
+
+    cv = GridSearchCV(pipeline, param_grid=parameters,
+                      scoring='f1_micro',verbose= 1,n_jobs =-1)
+
+    return cv
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
