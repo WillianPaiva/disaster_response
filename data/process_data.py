@@ -12,7 +12,12 @@ def convert_categories_to_numerical(categories: pd.DataFrame)->pd.DataFrame:
         categories: encoded categories
     '''
     for col in categories:
-        categories[col] = categories[col].map(lambda x: 1 if int(x.split("-")[1]) > 0 else 0 )
+
+        # as in some categories is possible to find values different
+        # then 0 and 1 here is necessary to make sure that the return 
+        # values are 0 or 1
+        categories[col] = categories[col].map(
+            lambda x: 1 if int(x.split("-")[1]) > 0 else 0 )
     return categories
 
 
@@ -24,9 +29,14 @@ def split_categories(categories: pd.DataFrame)->pd.DataFrame:
     Returns
         categories: encoded categories
     '''
+    # first we split the category into columns
     categories = categories['categories'].str.split(';',expand=True)
+
+    # here we change the name of each column to the name of the category
     row = categories.iloc[[1]].values[0]
     categories.columns = [ x.split("-")[0] for x in row]
+
+    # and finaly transform all the categorys into a numerical values
     categories = convert_categories_to_numerical(categories)
     return categories
 
