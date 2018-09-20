@@ -1,32 +1,50 @@
 # Disaster Response Pipeline Project
+Based on a dataset from [Figure Eight](https://www.figure-eight.com/) that has messages received during emergencies and classified based on the best response for the message.
+the dataset contains a total of 36 different classifications and each message can have multiple categories.
 
-### install dependencies
+this project attempt to recognize the set of categories of each message to be able to make the process of sending the proper help (response) in a more efficient way (time and resources).
+
+this is achieved by leveraging the power of machine learning. 
+in this project, we use Random Forest to tackle this problem reaching an accuracy as high as 80%.
+
+the process is divided into 3 main parts 
+
+1. Data processing 
+> clean the data and prepare the categories in a way that can be consumed by the machine learning algorithms
+
+2. Model training 
+> this part is where the magic happens, all the is passed to a pipeline and creating the prediction model.
+
+3. Visualization and Prediction
+> that is the final part of the project, here you will find a web app where is possible to infer some sentences and analyse the results.
+
+## install dependencies
 this project was made using the Pipenv tool but a requirements.txt is also included
 
-#### with Pipenv
+### with Pipenv
 run the following commands to use this tool
 ```
 pipenv install
 ```
 
-#### with pip
+### with pip
 
 run the following commands *inside your virtualenv* to use this tool
 ```
 pip install -r requirements.txt
 ```
 
-### Instructions:
+## Instructions:
 Run the following commands in the project's root directory to set up your database, model and start the server
 
-#### with the run script
+### with the run script
 
-##### with Pipenv
+#### with Pipenv
 ```
 pipenv run ./run.sh
 ```
 
-##### with pip
+#### with pip
 *inside your virtualenv*
 ```
 ./run.sh
@@ -35,28 +53,28 @@ pipenv run ./run.sh
 Go to http://0.0.0.0:3001/
 
 
-#### running module by module
+### running module by module
 
 here is how to run each module of this project:
 
-##### database
+#### database
 to generate the database you will need to run the following command:
 
 ```
 python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/disaster_response
 ```
 
-##### model
+#### model
 in order to create the model you will need to to run the following command:
 ```
-python models/train_classifier.py data/disaster_response.db model.pkl
+python models/train_classifier.py data/disaster_response.db models/model.pkl
 ```
 
 
-#### app
+### app
 and finally to run the flask app you will need to run the following command:
 ```
-python app/run.sh
+python app/run.py
 ```
 
 Go to http://0.0.0.0:3001/
