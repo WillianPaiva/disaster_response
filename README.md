@@ -11,13 +11,17 @@ the process is divided into 3 main parts
 
 1. Data processing
 
-you can see in details the process at the [ETL notebook ](https://github.com/WillianPaiva/disaster_response/blob/master/notebooks/ETL%20Pipeline%20Preparation.ipynb)
+clean the data and prepare the categories in a way that can be consumed by the machine learning algorithms
 
-> clean the data and prepare the categories in a way that can be consumed by the machine learning algorithms
+> you can see in details the process at the [ETL notebook ](https://github.com/WillianPaiva/disaster_response/blob/master/notebooks/ETL%20Pipeline%20Preparation.ipynb)
+
 
 2. Model training
-you can see in details the process at the [ML notebook ](https://github.com/WillianPaiva/disaster_response/blob/master/notebooks/ML%20Pipeline%20Preparation.ipynb)
-> this part is where the magic happens, all the is passed to a pipeline and creating the prediction model.
+
+
+this part is where the magic happens, all the is passed to a pipeline and creating the prediction model.
+
+> you can see in details the process at the [ML notebook ](https://github.com/WillianPaiva/disaster_response/blob/master/notebooks/ML%20Pipeline%20Preparation.ipynb)
 
 3. Visualization and Prediction
 > that is the final part of the project, here you will find a web app where is possible to infer some sentences and analyse the results.
