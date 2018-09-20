@@ -31,10 +31,16 @@ def load_data(database_filepath: str)->Tuple[pd.DataFrame, pd.DataFrame, List[st
         y: the categories (one-hot encoded)
         categories; ordered list of all the categories
     '''
+
+    # create the engine and load the sqlite database into a pandas DataFrame
     engine = create_engine('sqlite:///{}'.format(database_filepath))
     df = pd.read_sql("SELECT * FROM disaster_response",engine) 
 
+    # create a DataFrame with only the features (messages)
     X = df['message']
+
+    # crete the DataFrame of labels (categories) by dropping 
+    # the not relevant columns
     y = df.drop(['id', 'message', 'original', 'genre'],  axis=1).astype(float)
     categories = y.columns.values
     return X, y, categories
@@ -48,7 +54,11 @@ def tokenize(text:str)->List[str] :
     Returns:
         List; list of tokens (string)
     '''
+
+    # tokenize the string 
     tokens = nltk.word_tokenize(text)
+
+    # create a lemmatizer and apply it to each token
     lemmatizer = nltk.WordNetLemmatizer()
     return [lemmatizer.lemmatize(x).lower().strip() for x in tokens]
 
@@ -58,29 +68,29 @@ def build_model()->GridSearchCV:
     Returns:
         GridSearchCV: the model 
     '''
+
+    # define the pipeline to transform the data and before 
+    # fiting or predicting as following:
+    # sentence --> vectorize --> term-frequency --> Model
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
-        ('clf', RandomForestClassifier(max_depth=None,
-                                       min_samples_leaf=1,
-                                       min_samples_split=10,
-                                       n_estimators=20)
+        ('clf', RandomForestClassifier()
         )
     ])
+
+    # parameters to be used on the gridsearch for the sake of 
+    # time this parameters are drastically reduced and the results
+    # found here are 80% accuracy and the parameters min_samples_splint = 5 
+    # and n_esimators = 50 
     parameters = {
-        'vect__ngram_range': ((1, 1), (1, 2)),
-        'vect__max_df': (0.5, 0.75, 1.0),
-        'vect__max_features': (None, 5000, 10000),
-        'tfidf__use_idf': (True, False),
-        'clf__max_depth': [10, 20, None],
-        'clf__min_samples_leaf': [1, 2, 4],
-        'clf__min_samples_split': [2, 5, 10],
-        'clf__n_estimators': [10, 20, 40, 50, 100]}
+        'clf__min_samples_split': [5,10, 15],
+        'clf__n_estimators': [50, 100, 150]}
 
 
-
+    # create the gridsearch with the parameters
     cv = GridSearchCV(pipeline, param_grid=parameters,
-                      scoring='f1_micro',verbose= 1,n_jobs =-1)
+                      scoring='accuracy',verbose= 1,n_jobs =-1)
 
     return cv
 
