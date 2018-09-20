@@ -1,7 +1,7 @@
 import json
 import plotly
 import pandas as pd
-
+import os
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
@@ -26,11 +26,26 @@ def tokenize(text):
     return clean_tokens
 
 # load data
-engine = create_engine('sqlite:///../data/disaster_response.db')
+
+# get the path of this file
+path = os.path.abspath(__file__)     
+
+# get the parent directory as the base path
+base_path = '/'.join(path.split('/')[:-2])
+
+# build the path to the database
+sqlite_path = 'sqlite:///{}'.format(os.path.join(
+    base_path,"data/disaster_response.db"))
+
+# build the path to the model pickle
+model_path = os.path.join(base_path,"models/model.pkl")
+
+# load the database
+engine = create_engine(sqlite_path)
 df = pd.read_sql_table('disaster_response', engine)
 
 # load model
-model = joblib.load("../models/model.pkl")
+model = joblib.load(model_path)
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -39,14 +54,14 @@ model = joblib.load("../models/model.pkl")
 def index():
 
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
-
+    # extract all the categories to plot
     y = df.drop(['id', 'message', 'original', 'genre'],  axis=1).astype(float)
     cat_names = y.columns.values
-
+   
+    # count the occurence of each category
     cat_counts = [sum(y[x]) for x in cat_names]
+
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
             'data': [
