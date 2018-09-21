@@ -10,7 +10,7 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.model_selection import GridSearchCV
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.metrics import classification_report
-from sklearn.metrics import fbeta_score, make_scorer
+from sklearn.metrics import fbeta_score, make_scorer, accuracy_score
 from typing import Tuple, List
 import numpy as np
 import pickle
@@ -92,7 +92,7 @@ def build_model()->GridSearchCV:
     cv = GridSearchCV(pipeline, param_grid=parameters,
                       scoring='accuracy',verbose= 1,n_jobs =-1)
 
-    return cv
+    return pipeline
 
 
 def evaluate_model(model: GridSearchCV, X_test: pd.DataFrame, Y_test: pd.DataFrame, category_names: List)->None:
@@ -107,6 +107,9 @@ def evaluate_model(model: GridSearchCV, X_test: pd.DataFrame, Y_test: pd.DataFra
     '''
     y_pred = model.predict(X_test)
     print(classification_report(Y_test, y_pred, target_names=category_names))
+    for  idx, cat in enumerate(Y_test.columns.values):
+        print("{} -- {}".format(cat, accuracy_score(Y_test.values[:,idx], y_pred[:, idx])))
+    print("accuracy = {}".format(accuracy_score(Y_test, y_pred)))
 
 
 def save_model(model: GridSearchCV, model_filepath: str)-> None:
