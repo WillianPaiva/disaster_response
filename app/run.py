@@ -7,7 +7,7 @@ from nltk.tokenize import word_tokenize
 
 from flask import Flask
 from flask import render_template, request, jsonify
-from plotly.graph_objs import Bar
+from plotly.graph_objs import Bar, Heatmap
 from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
@@ -61,6 +61,10 @@ def index():
     # count the occurence of each category
     cat_counts = [sum(y[x]) for x in cat_names]
 
+    # generate the correlation matrix
+    corr = y.corr()
+    # get the labels names 
+    labels = y.columns.values
     # create visuals
     graphs = [
         {
@@ -79,6 +83,20 @@ def index():
                 'xaxis': {
                     'title': "Genre"
                 }
+            }
+        },
+        {
+            'data': [
+                Heatmap(
+                    z=corr.values,
+                    x=labels,
+                    y=labels
+                )
+            ],
+
+            'layout': {
+                'title': 'categories correlation',
+                'height': 1000
             }
         }
     ]
